@@ -19,22 +19,22 @@ namespace KnihovnaBCSH2
         private void LoadKnihy(string searchTerm = "")
         {
             var knihy = string.IsNullOrWhiteSpace(searchTerm)
-               ? _db.Knihy.FindAll().ToList() 
+               ? _db.Knihy.FindAll().ToList()
                : _db.Knihy.Find(k =>
                    k.Nazev.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                    k.Autor.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                    k.ISBN.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                   k.RokVydani.ToString().Contains(searchTerm) || 
+                   k.RokVydani.ToString().Contains(searchTerm) ||
                    k.Zanr.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                   k.Nakladatelstvi.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList(); 
+                   k.Nakladatelstvi.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            dataGridView1.DataSource = null; 
-            dataGridView1.DataSource = knihy; 
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = knihy;
         }
 
         private void btnAddBook_Click(object sender, EventArgs e)
         {
-            using (var addBookForm = new AddBookForm())
+            using (var addBookForm = new AddBookForm(_db))
             {
                 if (addBookForm.ShowDialog() == DialogResult.OK)
                 {
@@ -49,7 +49,7 @@ namespace KnihovnaBCSH2
 
         private void btnDeleteBook_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0) 
+            if (dataGridView1.SelectedRows.Count > 0)
             {
                 var selectedId = (ObjectId)dataGridView1.SelectedRows[0].Cells["Id"].Value;
 
@@ -57,7 +57,7 @@ namespace KnihovnaBCSH2
 
                 if (deleted)
                 {
-                    LoadKnihy(); 
+                    LoadKnihy();
                 }
                 else
                 {
@@ -72,8 +72,44 @@ namespace KnihovnaBCSH2
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string searchTerm = txtSearch.Text.Trim(); 
+            string searchTerm = txtSearch.Text.Trim();
             LoadKnihy(searchTerm);
+        }
+
+        private void btnAddSection_Click(object sender, EventArgs e)
+        {
+            using (var sectionForm = new SectionForm())
+            {
+                if (sectionForm.ShowDialog() == DialogResult.OK)
+                {
+                    var newSection = sectionForm.NewSection;
+
+                    _db.Sekce.Insert(newSection);
+
+                    LoadSections();
+                }
+            }
+        }
+
+        private void LoadSections()
+        {
+            var sekce = _db.Sekce.FindAll().ToList();
+
+            var books = _db.Knihy.FindAll().ToList();
+
+            MessageBox.Show(sekce.First().ToString());
+
+            dataGridView1.DataSource = sekce;
+        }
+
+        private void btnLoadBooks_Click(object sender, EventArgs e)
+        {
+            LoadKnihy();
+        }
+
+        private void btnLoadSections_Click(object sender, EventArgs e)
+        {
+            LoadSections();
         }
     }
 }
