@@ -100,7 +100,6 @@ namespace BSCH2Knihovna.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
         public void Dispose()
         {
             _repository.Dispose();
