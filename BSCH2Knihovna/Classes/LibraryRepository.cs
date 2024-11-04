@@ -1,0 +1,83 @@
+﻿using LiteDB;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BSCH2Knihovna.Classes
+{
+    public class LibraryRepository : IDisposable
+    {
+        private readonly LiteDatabase _context;
+
+        private const string DatabasePath = @"LibraryData.db";
+
+        public LibraryRepository()
+        {
+            _context = new LiteDatabase(DatabasePath);
+        }
+
+        public IEnumerable<Kniha> GetAllKnihy() => _context.GetCollection<Kniha>("Knihy").FindAll();
+
+        public void AddKniha(Kniha kniha) => _context.GetCollection<Kniha>("Knihy").Insert(kniha);
+
+        public void UpdateKniha(Kniha kniha) => _context.GetCollection<Kniha>("Knihy").Update(kniha);
+
+        public void DeleteKniha(string id) => _context.GetCollection<Kniha>("Knihy").Delete(id);
+
+        public IEnumerable<Sekce> GetAllSekce()
+        {
+            var sekceCollection = _context.GetCollection<Sekce>("Sekce");
+            var sekceList = sekceCollection.FindAll().ToList();
+
+            foreach (var sekce in sekceList)
+            {
+                sekce.Knihy = _context.GetCollection<Kniha>("Knihy").Find(k => k.SekceId == sekce.Id).ToList();
+            }
+
+            return sekceList;
+        }
+
+
+        public void AddSekce(Sekce sekce) => _context.GetCollection<Sekce>("Sekce").Insert(sekce);
+
+        public void UpdateSekce(Sekce sekce) => _context.GetCollection<Sekce>("Sekce").Update(sekce);
+
+        public void DeleteSekce(int id) => _context.GetCollection<Sekce>("Sekce").Delete(id);
+
+        public IEnumerable<Ctenar> GetAllCtenari() => _context.GetCollection<Ctenar>("Ctenari").FindAll();
+
+        public void AddCtenar(Ctenar ctenar) => _context.GetCollection<Ctenar>("Ctenari").Insert(ctenar);
+
+        public void UpdateCtenar(Ctenar ctenar) => _context.GetCollection<Ctenar>("Ctenari").Update(ctenar);
+
+        public void DeleteCtenar(int id) => _context.GetCollection<Ctenar>("Ctenari").Delete(id);
+
+        public void ClearCollection(string collectionName)
+        {
+            _context.DropCollection(collectionName);
+        }
+
+        public void ClearDatabase()
+        {
+            foreach (var collectionName in _context.GetCollectionNames())
+            {
+                _context.DropCollection(collectionName);
+            }
+        }
+
+        public void DeleteDatabaseFile()
+        {
+            _context.Dispose(); 
+            if (File.Exists(DatabasePath))
+            {
+                File.Delete(DatabasePath);
+            }
+        }
+
+        public void Dispose() => _context.Dispose();
+    }
+
+}

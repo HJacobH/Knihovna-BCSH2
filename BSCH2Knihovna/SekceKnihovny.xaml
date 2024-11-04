@@ -1,0 +1,46 @@
+﻿<Window x:Class="BSCH2Knihovna.SekceKnihovny"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BSCH2Knihovna"
+        mc:Ignorable="d"
+        Title="Správa Sekcí" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding SekceList}" SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
+                <DataGridTextColumn Header="Místnost" Binding="{Binding Mistnost}" Width="*"/>
+                <DataGridTextColumn Header="Kategorie" Binding="{Binding Kategorie}" Width="*"/>
+                <DataGridTextColumn Header="Popis" Binding="{Binding Popis}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
+            <TextBlock Text="Místnost:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox Width="200" Text="{Binding SelectedSekce.Mistnost, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Kategorie:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <ComboBox Width="200" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedSekce.Kategorie, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Popis:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBox Width="200" Text="{Binding SelectedSekce.Popis, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Add" Command="{Binding AddSekceCommand}" Width="75" Margin="5,0"/>
+            <Button Content="Update" Command="{Binding UpdateSekceCommand}" Width="75" Margin="5,0"/>
+            <Button Content="Delete" Command="{Binding DeleteSekceCommand}" Width="75" Margin="5,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
