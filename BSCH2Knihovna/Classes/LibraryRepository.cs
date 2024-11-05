@@ -29,12 +29,12 @@ namespace BSCH2Knihovna.Classes
 
         public IEnumerable<Sekce> GetAllSekce()
         {
-            var sekceCollection = _context.GetCollection<Sekce>("Sekce");
-            var sekceList = sekceCollection.FindAll().ToList();
+            var sekceList = _context.GetCollection<Sekce>("Sekce").FindAll().ToList();
 
+            var knihyCollection = _context.GetCollection<Kniha>("Knihy");
             foreach (var sekce in sekceList)
             {
-                sekce.Knihy = _context.GetCollection<Kniha>("Knihy").Find(k => k.SekceId == sekce.Id).ToList();
+                sekce.Knihy = knihyCollection.Find(k => k.SekceId == sekce.Id).ToList();
             }
 
             return sekceList;

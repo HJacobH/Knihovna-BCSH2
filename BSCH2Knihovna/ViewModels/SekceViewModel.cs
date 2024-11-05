@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -17,7 +18,6 @@ namespace BSCH2Knihovna.ViewModels
         private readonly LibraryRepository _repository;
 
         public ObservableCollection<Sekce> SekceList { get; set; } = new ObservableCollection<Sekce>();
-        public Sekce SelectedSekce { get; set; } = new Sekce(); 
 
         public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>
     {
@@ -32,9 +32,20 @@ namespace BSCH2Knihovna.ViewModels
         public ICommand UpdateSekceCommand { get; }
         public ICommand DeleteSekceCommand { get; }
 
+        public Sekce SelectedSekce
+        {
+            get => _selectedSekce;
+            set
+            {
+                _selectedSekce = value;
+                OnPropertyChanged(nameof(SelectedSekce));
+            }
+        }
+
         public SekceViewModel()
         {
             _repository = new LibraryRepository();
+            SelectedSekce = new Sekce(); 
             LoadSekce();
 
             AddSekceCommand = new RelayCommand(AddSekce);
@@ -43,17 +54,29 @@ namespace BSCH2Knihovna.ViewModels
         }
 
         private void LoadSekce()
+    {
+        SekceList.Clear();
+        var sekceData = _repository.GetAllSekce();
+        foreach (var sekce in sekceData)
         {
-            SekceList.Clear();
-            var sekceData = _repository.GetAllSekce();
-            foreach (var sekce in sekceData)
-            {
-                SekceList.Add(sekce);
-            }
+            SekceList.Add(sekce);
         }
+    }
 
         private void AddSekce()
         {
+            if (SelectedSekce == null)
+            {
+                SelectedSekce = new Sekce();
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedSekce.Mistnost) ||
+                string.IsNullOrWhiteSpace(SelectedSekce.Kategorie))
+            {
+                MessageBox.Show("Všechna pole musí být vyplněna", "Chybějící Informace!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var newSekce = new Sekce
             {
                 Mistnost = SelectedSekce.Mistnost,
@@ -63,7 +86,9 @@ namespace BSCH2Knihovna.ViewModels
 
             _repository.AddSekce(newSekce);
             SekceList.Add(newSekce);
+
             SelectedSekce = new Sekce();
+            OnPropertyChanged(nameof(SelectedSekce));
         }
 
         private void UpdateSekce()
@@ -88,10 +113,8 @@ namespace BSCH2Knihovna.ViewModels
         private bool CanModifySekce() => SelectedSekce != null && SelectedSekce.Id != 0;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
+        protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
         public void Dispose()
         {
             _repository.Dispose();
