@@ -2,6 +2,7 @@
 using BSCH2Knihovna.Commands;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -83,6 +84,8 @@ namespace BSCH2Knihovna.ViewModels
             LoadKnihy();
             LoadSekce();
 
+            EditingKniha = new Kniha();
+
             AddKnihaCommand = new RelayCommand(AddKniha);
             UpdateKnihaCommand = new RelayCommand(UpdateKniha, CanModifyKniha);
             DeleteKnihaCommand = new RelayCommand(DeleteKniha, CanModifyKniha);
@@ -108,7 +111,17 @@ namespace BSCH2Knihovna.ViewModels
 
         private void AddKniha()
         {
-            if (SelectedSekce == null) return;
+            if (EditingKniha == null)
+            {
+                MessageBox.Show("EditingKniha is not initialized.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (SelectedSekce == null)
+            {
+                MessageBox.Show("Please select a Sekce first.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             var newKniha = new Kniha
             {
@@ -123,6 +136,7 @@ namespace BSCH2Knihovna.ViewModels
 
             _repository.AddKniha(newKniha);
             Knihy.Add(newKniha);
+
             EditingKniha = new Kniha();
         }
 
@@ -137,8 +151,15 @@ namespace BSCH2Knihovna.ViewModels
                 SelectedKniha.Zanr = EditingKniha.Zanr;
                 SelectedKniha.Nakladatelstvi = EditingKniha.Nakladatelstvi;
 
+                if (SelectedSekce != null)
+                {
+                    SelectedKniha.SekceId = SelectedSekce.Id;
+                    SelectedKniha.Zanr = SelectedSekce.Kategorie;
+                }
+
                 _repository.UpdateKniha(SelectedKniha);
-                LoadKnihy(); 
+
+                LoadKnihy();
             }
         }
 

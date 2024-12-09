@@ -39,8 +39,6 @@ namespace BSCH2Knihovna.Classes
 
             return sekceList;
         }
-
-
         public void AddSekce(Sekce sekce) => _context.GetCollection<Sekce>("Sekce").Insert(sekce);
 
         public void UpdateSekce(Sekce sekce) => _context.GetCollection<Sekce>("Sekce").Update(sekce);
@@ -49,11 +47,46 @@ namespace BSCH2Knihovna.Classes
 
         public IEnumerable<Ctenar> GetAllCtenari() => _context.GetCollection<Ctenar>("Ctenari").FindAll();
 
-        public void AddCtenar(Ctenar ctenar) => _context.GetCollection<Ctenar>("Ctenari").Insert(ctenar);
+        public void AddCtenar(Ctenar ctenar)
+        {
+            if (ctenar == null) return;
 
-        public void UpdateCtenar(Ctenar ctenar) => _context.GetCollection<Ctenar>("Ctenari").Update(ctenar);
+            var collection = _context.GetCollection<Ctenar>("Ctenari");
 
-        public void DeleteCtenar(int id) => _context.GetCollection<Ctenar>("Ctenari").Delete(id);
+            collection.Insert(ctenar);
+        }
+        public void UpdateCtenar(Ctenar ctenar)
+        {
+            _context.GetCollection<Ctenar>("Ctenari").Update(ctenar);
+        }
+
+        public void DeleteCtenar(int id)
+        {
+            _context.GetCollection<Ctenar>("Ctenari").Delete(id);
+        }
+
+        public IEnumerable<Vypujceni> GetAllVypujceni() => _context.GetCollection<Vypujceni>("Vypujceni").FindAll();
+
+        public void AddVypujceni(Vypujceni vypujceni) => _context.GetCollection<Vypujceni>("Vypujceni").Insert(vypujceni);
+
+        public void UpdateVypujceni(Vypujceni vypujceni)
+        {
+            var collection = _context.GetCollection<Vypujceni>("Vypujceni");
+
+            if (!collection.Update(vypujceni))
+            {
+                throw new Exception("Update failed. Record not found.");
+            }
+        }
+
+        public void DeleteVypujceni(int id) => _context.GetCollection<Vypujceni>("Vypujceni").Delete(id);
+
+        public IEnumerable<Vypujceni> GetBorrowingsByCtenarId(int ctenarId)
+        {
+            return _context.GetCollection<Vypujceni>("Vypujceni")
+                           .Find(v => v.CtenarId == ctenarId);
+        }
+
 
         public void ClearCollection(string collectionName)
         {

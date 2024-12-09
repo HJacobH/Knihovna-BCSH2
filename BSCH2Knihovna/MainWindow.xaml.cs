@@ -30,14 +30,14 @@ namespace BSCH2Knihovna
 
         private void OpenReadersView_Click(object sender, RoutedEventArgs e)
         {
-            //var readersView = new ReadersView();
-            //readersView.Show();
+            var readersView = new CtenarView();
+            readersView.Show();
         }
 
         private void OpenBorrowingsView_Click(object sender, RoutedEventArgs e)
         {
-            //var borrowingsView = new BorrowingsView();
-            //borrowingsView.Show();
+            var borrowingsView = new VypujceniView();
+            borrowingsView.Show();
         }
 
         private void OpenSekceView_Click(object sender, RoutedEventArgs e)

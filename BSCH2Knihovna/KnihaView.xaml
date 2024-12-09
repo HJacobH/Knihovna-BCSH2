@@ -30,19 +30,19 @@
 
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
             <TextBlock Text="ISBN:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding EditingKniha.ISBN, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Text="{Binding EditingKniha.ISBN, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,5"/>
 
             <TextBlock Text="Název:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding EditingKniha.Nazev, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Text="{Binding EditingKniha.Nazev, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,5"/>
 
             <TextBlock Text="Autor:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding EditingKniha.Autor, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Text="{Binding EditingKniha.Autor, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,5"/>
 
             <TextBlock Text="Rok Vydání:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding EditingKniha.RokVydani, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Text="{Binding EditingKniha.RokVydani, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,5"/>
 
             <TextBlock Text="Nakladatelství:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding EditingKniha.Nakladatelstvi, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Text="{Binding EditingKniha.Nakladatelstvi, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,5"/>
 
             <TextBlock Text="Sekce Kategorie:" FontWeight="Bold" Margin="0,0,0,5"/>
             <ComboBox Width="200" ItemsSource="{Binding SekceList}" 
