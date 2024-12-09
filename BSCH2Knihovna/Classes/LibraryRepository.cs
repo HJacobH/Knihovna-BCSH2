@@ -77,7 +77,19 @@ namespace BSCH2Knihovna.Classes
             }
         }
 
+        public void ClearKnihaSekce(int sekceId)
+        {
+            var knihyCollection = _context.GetCollection<Kniha>("Knihy");
+
+            var knihyToUpdate = knihyCollection.Find(k => k.SekceId == sekceId).ToList();
+
+            foreach (var kniha in knihyToUpdate)
+            {
+                kniha.Zanr = null;
+                kniha.SekceId = 0;
+                knihyCollection.Update(kniha);
+            }
+        }
         public void Dispose() => _context.Dispose();
     }
-
 }

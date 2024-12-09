@@ -1,25 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BSCH2Knihovna.Classes;
+using BSCH2Knihovna.Commands;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
 {
-    using BSCH2Knihovna.Classes;
-    using BSCH2Knihovna.Commands;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Windows.Input;
-
     public class KnihaViewModel : INotifyPropertyChanged
     {
         private readonly LibraryRepository _repository;
 
         public ObservableCollection<Kniha> Knihy { get; set; } = new ObservableCollection<Kniha>();
-        public ObservableCollection<Sekce> SekceList { get; set; } = new ObservableCollection<Sekce>(); 
-        public Kniha SelectedKniha { get; set; } = new Kniha();
-        public Sekce SelectedSekce { get; set; } 
+        public ObservableCollection<Sekce> SekceList { get; set; } = new ObservableCollection<Sekce>();
+
+        private Kniha _selectedKniha;
+        private Kniha _editingKniha;
+
+        public Kniha SelectedKniha
+        {
+            get => _selectedKniha;
+            set
+            {
+                _selectedKniha = value;
+
+                if (_selectedKniha != null)
+                {
+                    EditingKniha = new Kniha
+                    {
+                        ISBN = _selectedKniha.ISBN,
+                        Nazev = _selectedKniha.Nazev,
+                        Autor = _selectedKniha.Autor,
+                        RokVydani = _selectedKniha.RokVydani,
+                        Zanr = _selectedKniha.Zanr,
+                        Nakladatelstvi = _selectedKniha.Nakladatelstvi,
+                        SekceId = _selectedKniha.SekceId
+                    };
+                }
+                else
+                {
+                    EditingKniha = new Kniha();
+                }
+
+                OnPropertyChanged(nameof(SelectedKniha));
+            }
+        }
+
+        public Kniha EditingKniha
+        {
+            get => _editingKniha;
+            set
+            {
+                _editingKniha = value;
+                OnPropertyChanged(nameof(EditingKniha));
+            }
+        }
+
+        private Sekce _selectedSekce;
+        public Sekce SelectedSekce
+        {
+            get => _selectedSekce;
+            set
+            {
+                _selectedSekce = value;
+
+                if (EditingKniha != null && SelectedSekce != null)
+                {
+                    EditingKniha.Zanr = SelectedSekce.Kategorie;
+                    OnPropertyChanged(nameof(EditingKniha));
+                }
+
+                OnPropertyChanged(nameof(SelectedSekce));
+            }
+        }
 
         public ICommand AddKnihaCommand { get; }
         public ICommand UpdateKnihaCommand { get; }
@@ -60,26 +112,33 @@ namespace BSCH2Knihovna.ViewModels
 
             var newKniha = new Kniha
             {
-                ISBN = SelectedKniha.ISBN,
-                Nazev = SelectedKniha.Nazev,
-                Autor = SelectedKniha.Autor,
-                RokVydani = SelectedKniha.RokVydani,
+                ISBN = EditingKniha.ISBN,
+                Nazev = EditingKniha.Nazev,
+                Autor = EditingKniha.Autor,
+                RokVydani = EditingKniha.RokVydani,
                 Zanr = SelectedSekce.Kategorie,
-                Nakladatelstvi = SelectedKniha.Nakladatelstvi,
-                SekceId = SelectedSekce.Id 
+                Nakladatelstvi = EditingKniha.Nakladatelstvi,
+                SekceId = SelectedSekce.Id
             };
 
             _repository.AddKniha(newKniha);
             Knihy.Add(newKniha);
-            SelectedKniha = new Kniha();
+            EditingKniha = new Kniha();
         }
 
         private void UpdateKniha()
         {
-            if (SelectedKniha != null)
+            if (SelectedKniha != null && EditingKniha != null)
             {
+                SelectedKniha.ISBN = EditingKniha.ISBN;
+                SelectedKniha.Nazev = EditingKniha.Nazev;
+                SelectedKniha.Autor = EditingKniha.Autor;
+                SelectedKniha.RokVydani = EditingKniha.RokVydani;
+                SelectedKniha.Zanr = EditingKniha.Zanr;
+                SelectedKniha.Nakladatelstvi = EditingKniha.Nakladatelstvi;
+
                 _repository.UpdateKniha(SelectedKniha);
-                LoadKnihy();
+                LoadKnihy(); 
             }
         }
 
@@ -89,7 +148,7 @@ namespace BSCH2Knihovna.ViewModels
             {
                 _repository.DeleteKniha(SelectedKniha.ISBN);
                 Knihy.Remove(SelectedKniha);
-                SelectedKniha = new Kniha();
+                EditingKniha = new Kniha();
             }
         }
 
@@ -106,5 +165,4 @@ namespace BSCH2Knihovna.ViewModels
             _repository.Dispose();
         }
     }
-
 }

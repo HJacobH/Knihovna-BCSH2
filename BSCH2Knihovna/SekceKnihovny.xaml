@@ -17,27 +17,36 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding SekceList}" SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0">
+        <DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding SekceList}" 
+          SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*" Visibility="Collapsed"/>
                 <DataGridTextColumn Header="Místnost" Binding="{Binding Mistnost}" Width="*"/>
                 <DataGridTextColumn Header="Kategorie" Binding="{Binding Kategorie}" Width="*"/>
                 <DataGridTextColumn Header="Popis" Binding="{Binding Popis}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
+
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
             <TextBlock Text="Místnost:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedSekce.Mistnost, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingSekce.Mistnost, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Kategorie:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ComboBox Width="200" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedSekce.Kategorie, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <ComboBox Width="200" ItemsSource="{Binding Categories}" SelectedItem="{Binding EditingSekce.Kategorie, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Popis:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedSekce.Popis, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingSekce.Popis, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Add" Command="{Binding AddSekceCommand}" Width="60" Margin="5,0"/>
+                <Button Content="Update" Command="{Binding UpdateSekceCommand}" Width="60" Margin="5,0"/>
+                <Button Content="Delete" Command="{Binding DeleteSekceCommand}" Width="60" Margin="5,0"/>
+            </StackPanel>
         </StackPanel>
 
         <TextBlock Text="Books in this Section:" FontWeight="Bold" Grid.Row="1" Grid.Column="0" Margin="10,10,0,5"/>
+
         <DataGrid Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding SelectedSekce.Knihy}" AutoGenerateColumns="False" Height="200" Margin="10,0,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="*"/>
@@ -47,11 +56,5 @@
                 <DataGridTextColumn Header="Nakladatelství" Binding="{Binding Nakladatelstvi}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Add" Command="{Binding AddSekceCommand}" Width="75" Margin="5,0"/>
-            <Button Content="Update" Command="{Binding UpdateSekceCommand}" Width="75" Margin="5,0"/>
-            <Button Content="Delete" Command="{Binding DeleteSekceCommand}" Width="75" Margin="5,0"/>
-        </StackPanel>
     </Grid>
 </Window>

@@ -30,23 +30,25 @@
 
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
             <TextBlock Text="ISBN:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedKniha.ISBN, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingKniha.ISBN, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Název:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedKniha.Nazev, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingKniha.Nazev, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Autor:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedKniha.Autor, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingKniha.Autor, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Rok Vydání:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedKniha.RokVydani, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingKniha.RokVydani, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Nakladatelství:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBox Width="200" Text="{Binding SelectedKniha.Nakladatelstvi, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBox Width="200" Text="{Binding EditingKniha.Nakladatelstvi, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Sekce Kategorie:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ComboBox Width="200" ItemsSource="{Binding SekceList}" DisplayMemberPath="Kategorie" 
-                      SelectedItem="{Binding SelectedSekce, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <ComboBox Width="200" ItemsSource="{Binding SekceList}" 
+          DisplayMemberPath="Kategorie" 
+          SelectedItem="{Binding SelectedSekce, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+        
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
