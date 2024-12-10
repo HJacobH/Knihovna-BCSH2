@@ -9,16 +9,21 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding Ctenari}" SelectedItem="{Binding SelectedCtenar}" 
-          AutoGenerateColumns="False" Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">
+            <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,5,0" />
+            <TextBox Width="200" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding FilteredCtenari}" SelectedItem="{Binding SelectedCtenar}" 
+                  AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Margin="0,0,10,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Visibility="Collapsed"/>
-
                 <DataGridTextColumn Header="Jméno" Binding="{Binding Jmeno}" Width="*"/>
                 <DataGridTextColumn Header="Příjmení" Binding="{Binding Prijmeni}" Width="*"/>
                 <DataGridTextColumn Header="Telefon" Binding="{Binding Telefon}" Width="*"/>
@@ -26,7 +31,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,10" VerticalAlignment="Top">
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,10" VerticalAlignment="Top">
             <TextBlock Text="Jméno:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingCtenar.Jmeno, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
@@ -46,20 +51,14 @@
             </StackPanel>
         </StackPanel>
 
-
-
         <DataGrid ItemsSource="{Binding BorrowedBooks}" AutoGenerateColumns="False"
-          Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                  Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Visibility="Collapsed"/>
-
                 <DataGridTextColumn Header="Kniha" Binding="{Binding BookName}" Width="*"/>
-
                 <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" Width="*"/>
                 <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-
-
     </Grid>
 </Window>

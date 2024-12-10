@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -15,17 +16,30 @@ namespace BSCH2Knihovna.ViewModels
     public class VypujceniViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly LibraryRepository _repository;
+        private string _searchQuery;
 
         private Vypujceni _selectedVypujceni;
         private Vypujceni _editingVypujceni;
 
         public ObservableCollection<Vypujceni> VypujceniList { get; set; }
+        public ICollectionView FilteredVypujceniList { get; set; }
         public ObservableCollection<Kniha> KnihyList { get; set; }
         public ObservableCollection<Ctenar> CtenariList { get; set; }
 
         public ICommand AddVypujceniCommand { get; }
         public ICommand UpdateVypujceniCommand { get; }
         public ICommand DeleteVypujceniCommand { get; }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
+                FilteredVypujceniList.Refresh();
+            }
+        }
 
         public Vypujceni SelectedVypujceni
         {
@@ -78,6 +92,9 @@ namespace BSCH2Knihovna.ViewModels
             AddVypujceniCommand = new RelayCommand(AddVypujceni);
             UpdateVypujceniCommand = new RelayCommand(UpdateVypujceni, CanModifyVypujceni);
             DeleteVypujceniCommand = new RelayCommand(DeleteVypujceni, CanModifyVypujceni);
+
+            FilteredVypujceniList = CollectionViewSource.GetDefaultView(VypujceniList);
+            FilteredVypujceniList.Filter = FilterVypujceni;
         }
 
         private void AddVypujceni()
@@ -156,6 +173,19 @@ namespace BSCH2Knihovna.ViewModels
             {
                 VypujceniList.Add(item);
             }
+        }
+
+        private bool FilterVypujceni(object obj)
+        {
+            if (obj is Vypujceni vypujceni)
+            {
+                if (string.IsNullOrEmpty(SearchQuery))
+                    return true;
+
+                return (vypujceni.BookName?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                       (vypujceni.CtenarName?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+            return false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

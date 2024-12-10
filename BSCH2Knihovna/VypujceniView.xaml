@@ -8,19 +8,24 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding VypujceniList}" 
-          SelectedItem="{Binding SelectedVypujceni}" 
-          AutoGenerateColumns="False" 
-          Grid.Row="0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Book Name" Binding="{Binding BookName}" Width="*" />
-                <DataGridTextColumn Header="Reader Name" Binding="{Binding CtenarName}" Width="*" />
-                <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" Width="*" />
-                <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" Width="*" />
-                <DataGridTextColumn Header="Datum Vratu" Binding="{Binding DatumVratu}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <StackPanel Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBox Width="200" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
 
+            <DataGrid ItemsSource="{Binding FilteredVypujceniList}" 
+              SelectedItem="{Binding SelectedVypujceni}" 
+              AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Book Name" Binding="{Binding BookName}" Width="*" />
+                    <DataGridTextColumn Header="Reader Name" Binding="{Binding CtenarName}" Width="*" />
+                    <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" Width="*" />
+                    <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" Width="*" />
+                    <DataGridTextColumn Header="Datum Vratu" Binding="{Binding DatumVratu}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
 

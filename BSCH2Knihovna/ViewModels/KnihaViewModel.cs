@@ -3,6 +3,7 @@ using BSCH2Knihovna.Commands;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -10,12 +11,25 @@ namespace BSCH2Knihovna.ViewModels
     public class KnihaViewModel : INotifyPropertyChanged
     {
         private readonly LibraryRepository _repository;
-
+        private string _searchQuery;
         public ObservableCollection<Kniha> Knihy { get; set; } = new ObservableCollection<Kniha>();
         public ObservableCollection<Sekce> SekceList { get; set; } = new ObservableCollection<Sekce>();
 
         private Kniha _selectedKniha;
         private Kniha _editingKniha;
+
+        public ICollectionView FilteredKnihy { get; set; }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
+                FilteredKnihy.Refresh();
+            }
+        }
 
         public Kniha SelectedKniha
         {
@@ -89,6 +103,24 @@ namespace BSCH2Knihovna.ViewModels
             AddKnihaCommand = new RelayCommand(AddKniha);
             UpdateKnihaCommand = new RelayCommand(UpdateKniha, CanModifyKniha);
             DeleteKnihaCommand = new RelayCommand(DeleteKniha, CanModifyKniha);
+
+            FilteredKnihy = CollectionViewSource.GetDefaultView(Knihy);
+            FilteredKnihy.Filter = FilterBooks;
+        }
+
+        private bool FilterBooks(object obj)
+        {
+            if (obj is Kniha kniha)
+            {
+                if (string.IsNullOrEmpty(SearchQuery))
+                    return true;
+
+                return kniha.ISBN?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       kniha.Nazev?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       kniha.Autor?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       kniha.Zanr?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return false;
         }
 
         private void LoadKnihy()

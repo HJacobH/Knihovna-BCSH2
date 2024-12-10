@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -16,7 +17,9 @@ namespace BSCH2Knihovna.ViewModels
     {
         private Sekce _selectedSekce;
         private Sekce _editingSekce;
+        private string _searchQuery;
         private readonly LibraryRepository _repository;
+        public ICollectionView FilteredSekceList { get; set; }
 
         public ObservableCollection<Sekce> SekceList { get; set; } = new ObservableCollection<Sekce>();
 
@@ -32,6 +35,17 @@ namespace BSCH2Knihovna.ViewModels
         public ICommand AddSekceCommand { get; }
         public ICommand UpdateSekceCommand { get; }
         public ICommand DeleteSekceCommand { get; }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
+                FilteredSekceList.Refresh();
+            }
+        }
 
         public Sekce SelectedSekce
         {
@@ -77,6 +91,9 @@ namespace BSCH2Knihovna.ViewModels
             AddSekceCommand = new RelayCommand(AddSekce);
             UpdateSekceCommand = new RelayCommand(UpdateSekce, CanModifySekce);
             DeleteSekceCommand = new RelayCommand(DeleteSekce, CanModifySekce);
+
+            FilteredSekceList = CollectionViewSource.GetDefaultView(SekceList);
+            FilteredSekceList.Filter = FilterSekce;
         }
 
         private void LoadSekce()
@@ -142,6 +159,20 @@ namespace BSCH2Knihovna.ViewModels
 
                 OnPropertyChanged(nameof(SekceList));
             }
+        }
+
+        private bool FilterSekce(object obj)
+        {
+            if (obj is Sekce sekce)
+            {
+                if (string.IsNullOrEmpty(SearchQuery))
+                    return true;
+
+                return sekce.Mistnost.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       sekce.Kategorie.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       sekce.Popis?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return false;
         }
 
         private bool CanModifySekce() => SelectedSekce != null && SelectedSekce.Id != 0;

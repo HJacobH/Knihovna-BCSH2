@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BSCH2Knihovna.ViewModels
@@ -15,7 +16,7 @@ namespace BSCH2Knihovna.ViewModels
     public class CtenarViewModel : INotifyPropertyChanged
     {
         private readonly LibraryRepository _repository;
-
+        private string _searchQuery;
         public ObservableCollection<Ctenar> Ctenari { get; set; } = new ObservableCollection<Ctenar>();
         public ObservableCollection<Kniha> Knihy { get; set; } = new ObservableCollection<Kniha>();
 
@@ -95,6 +96,19 @@ namespace BSCH2Knihovna.ViewModels
         public ICommand UpdateCtenarCommand { get; }
         public ICommand DeleteCtenarCommand { get; }
 
+        public ICollectionView FilteredCtenari { get; }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
+                FilteredCtenari.Refresh();
+            }
+        }
+
         public CtenarViewModel()
         {
             _repository = new LibraryRepository();
@@ -102,9 +116,27 @@ namespace BSCH2Knihovna.ViewModels
 
             EditingCtenar = new Ctenar();
 
+            FilteredCtenari = CollectionViewSource.GetDefaultView(Ctenari);
+            FilteredCtenari.Filter = FilterCtenari;
+
             AddCtenarCommand = new RelayCommand(AddCtenar);
             UpdateCtenarCommand = new RelayCommand(UpdateCtenar, CanModifyCtenar);
             DeleteCtenarCommand = new RelayCommand(DeleteCtenar, CanModifyCtenar);
+        }
+
+        private bool FilterCtenari(object obj)
+        {
+            if (obj is Ctenar ctenar)
+            {
+                if (string.IsNullOrEmpty(SearchQuery))
+                    return true;
+
+                return ctenar.Jmeno.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       ctenar.Prijmeni.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       ctenar.Email?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       ctenar.Telefon?.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return false;
         }
 
         private void AddCtenar()
