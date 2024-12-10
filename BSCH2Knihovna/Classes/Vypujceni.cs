@@ -14,7 +14,7 @@ namespace BSCH2Knihovna.Classes
         public int KnihaId { get; set; }
         public int CtenarId { get; set; }
         public DateTime DatumVypujceni { get; set; }
-        public DateTime DatumVratenka { get; set; }
+        public DateTime? DatumVratenka { get; set; }
         public DateTime? DatumVratu { get; set; }
 
         public string BookName { get; set; }

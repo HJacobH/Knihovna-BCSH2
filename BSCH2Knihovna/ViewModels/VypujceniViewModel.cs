@@ -103,7 +103,8 @@ namespace BSCH2Knihovna.ViewModels
                 KnihaId = EditingVypujceni.KnihaId,
                 CtenarId = EditingVypujceni.CtenarId,
                 DatumVypujceni = DateTime.Now,
-                DatumVratenka = DateTime.Now.AddDays(14),
+                DatumVratenka = EditingVypujceni.DatumVratenka ?? DateTime.Now.AddDays(14), 
+                DatumVratu = EditingVypujceni.DatumVratu,
                 BookName = book?.Nazev ?? "Unknown Book",
                 CtenarName = reader?.Jmeno ?? "Unknown Reader"
             };
@@ -115,6 +116,7 @@ namespace BSCH2Knihovna.ViewModels
             OnPropertyChanged(nameof(EditingVypujceni));
         }
 
+
         private void UpdateVypujceni()
         {
             if (SelectedVypujceni == null)
@@ -123,19 +125,9 @@ namespace BSCH2Knihovna.ViewModels
                 return;
             }
 
-            bool isBookBorrowedByAnother = VypujceniList.Any(v =>
-                v.KnihaId == EditingVypujceni.KnihaId &&
-                v.Id != SelectedVypujceni.Id &&
-                v.DatumVratu == null);
-
-            if (isBookBorrowedByAnother)
-            {
-                MessageBox.Show("This book is already borrowed by another reader and not yet returned.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
             SelectedVypujceni.KnihaId = EditingVypujceni.KnihaId;
             SelectedVypujceni.CtenarId = EditingVypujceni.CtenarId;
+            SelectedVypujceni.DatumVratenka = EditingVypujceni.DatumVratenka;
             SelectedVypujceni.DatumVratu = EditingVypujceni.DatumVratu;
 
             _repository.UpdateVypujceni(SelectedVypujceni);
@@ -143,7 +135,6 @@ namespace BSCH2Knihovna.ViewModels
             RefreshVypujceniList();
             MessageBox.Show("Borrowing updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
 
         private void DeleteVypujceni()
         {
@@ -173,5 +164,4 @@ namespace BSCH2Knihovna.ViewModels
 
         public void Dispose() => _repository.Dispose();
     }
-
 }
