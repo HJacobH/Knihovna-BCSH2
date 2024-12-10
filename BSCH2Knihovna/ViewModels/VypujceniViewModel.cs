@@ -88,12 +88,19 @@ namespace BSCH2Knihovna.ViewModels
                 return;
             }
 
+            bool isBookBorrowed = VypujceniList.Any(v => v.KnihaId == EditingVypujceni.KnihaId && v.DatumVratu == null);
+            if (isBookBorrowed)
+            {
+                MessageBox.Show("This book is already borrowed and not yet returned.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             var newVypujceni = new Vypujceni
             {
                 KnihaId = EditingVypujceni.KnihaId,
                 CtenarId = EditingVypujceni.CtenarId,
                 DatumVypujceni = DateTime.Now,
-                DatumVratenka = DateTime.Now.AddDays(14)
+                DatumVratenka = DateTime.Now.AddDays(14) 
             };
 
             _repository.AddVypujceni(newVypujceni);
@@ -103,11 +110,23 @@ namespace BSCH2Knihovna.ViewModels
             OnPropertyChanged(nameof(EditingVypujceni));
         }
 
+
         private void UpdateVypujceni()
         {
             if (SelectedVypujceni == null)
             {
                 MessageBox.Show("No borrowing selected for update.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            bool isBookBorrowedByAnother = VypujceniList.Any(v =>
+                v.KnihaId == EditingVypujceni.KnihaId &&
+                v.Id != SelectedVypujceni.Id &&
+                v.DatumVratu == null);
+
+            if (isBookBorrowedByAnother)
+            {
+                MessageBox.Show("This book is already borrowed by another reader and not yet returned.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -120,6 +139,7 @@ namespace BSCH2Knihovna.ViewModels
             RefreshVypujceniList();
             MessageBox.Show("Borrowing updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
         private void DeleteVypujceni()
         {
