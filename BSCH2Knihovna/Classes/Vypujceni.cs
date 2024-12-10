@@ -18,6 +18,7 @@ namespace BSCH2Knihovna.Classes
         public DateTime? DatumVratu { get; set; }
 
         public string BookName { get; set; }
+        public string CtenarName { get; set; }
     }
 
 }

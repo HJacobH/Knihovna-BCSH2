@@ -65,7 +65,35 @@ namespace BSCH2Knihovna.Classes
             _context.GetCollection<Ctenar>("Ctenari").Delete(id);
         }
 
-        public IEnumerable<Vypujceni> GetAllVypujceni() => _context.GetCollection<Vypujceni>("Vypujceni").FindAll();
+        public IEnumerable<Vypujceni> GetAllVypujceni()
+        {
+            var vypujceniList = _context.GetCollection<Vypujceni>("Vypujceni").FindAll().ToList();
+
+            var knihyDict = _context.GetCollection<Kniha>("Knihy")
+                                    .FindAll()
+                                    .ToDictionary(k => k.Id, k => k.Nazev);
+
+            var ctenariDict = _context.GetCollection<Ctenar>("Ctenari")
+                                      .FindAll()
+                                      .ToDictionary(c => c.Id, c => c.Jmeno);
+
+            foreach (var vypujceni in vypujceniList)
+            {
+                if (knihyDict.TryGetValue(vypujceni.KnihaId, out string bookName))
+                    vypujceni.BookName = bookName;
+                else
+                    vypujceni.BookName = "Unknown Book";
+
+                if (ctenariDict.TryGetValue(vypujceni.CtenarId, out string ctenarName))
+                    vypujceni.CtenarName = ctenarName;
+                else
+                    vypujceni.CtenarName = "Unknown Reader";
+            }
+
+            return vypujceniList;
+        }
+
+
 
         public void AddVypujceni(Vypujceni vypujceni) => _context.GetCollection<Vypujceni>("Vypujceni").Insert(vypujceni);
 

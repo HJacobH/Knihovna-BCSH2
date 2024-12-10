@@ -95,12 +95,17 @@ namespace BSCH2Knihovna.ViewModels
                 return;
             }
 
+            var book = KnihyList.FirstOrDefault(k => k.Id == EditingVypujceni.KnihaId);
+            var reader = CtenariList.FirstOrDefault(c => c.Id == EditingVypujceni.CtenarId);
+
             var newVypujceni = new Vypujceni
             {
                 KnihaId = EditingVypujceni.KnihaId,
                 CtenarId = EditingVypujceni.CtenarId,
                 DatumVypujceni = DateTime.Now,
-                DatumVratenka = DateTime.Now.AddDays(14) 
+                DatumVratenka = DateTime.Now.AddDays(14),
+                BookName = book?.Nazev ?? "Unknown Book",
+                CtenarName = reader?.Jmeno ?? "Unknown Reader"
             };
 
             _repository.AddVypujceni(newVypujceni);
@@ -109,7 +114,6 @@ namespace BSCH2Knihovna.ViewModels
             EditingVypujceni = new Vypujceni();
             OnPropertyChanged(nameof(EditingVypujceni));
         }
-
 
         private void UpdateVypujceni()
         {

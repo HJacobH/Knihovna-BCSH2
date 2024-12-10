@@ -8,12 +8,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding VypujceniList}" SelectedItem="{Binding SelectedVypujceni}" 
-          AutoGenerateColumns="False" Grid.Row="0">
+        <DataGrid ItemsSource="{Binding VypujceniList}" SelectedItem="{Binding SelectedVypujceni}" AutoGenerateColumns="False" Grid.Row="0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
-                <DataGridTextColumn Header="Kniha ID" Binding="{Binding KnihaId}" />
-                <DataGridTextColumn Header="Čtenář ID" Binding="{Binding CtenarId}" />
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Visibility="Collapsed" />
+                <DataGridTextColumn Header="Book Name" Binding="{Binding BookName}" />
+                <DataGridTextColumn Header="Reader Name" Binding="{Binding CtenarName}" />
                 <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" />
                 <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" />
             </DataGrid.Columns>
