@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BSCH2Knihovna.SekceKnihovny"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Správa Sekcí" Height="450" Width="800">
+        Title="Section Management" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -22,20 +22,21 @@
         <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding FilteredSekceList}" 
                   SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Místnost" Binding="{Binding Mistnost}" Width="*"/>
-                <DataGridTextColumn Header="Kategorie" Binding="{Binding Kategorie}" Width="*"/>
-                <DataGridTextColumn Header="Popis" Binding="{Binding Popis}" Width="*"/>
+                <DataGridTextColumn Header="Room" Binding="{Binding Mistnost}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Kategorie}" Width="*"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Popis}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
-            <TextBlock Text="Místnost:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="Room:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingSekce.Mistnost, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Kategorie:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ComboBox Width="200" ItemsSource="{Binding Categories}" SelectedItem="{Binding EditingSekce.Kategorie, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            <TextBlock Text="Category:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <ComboBox Width="200" ItemsSource="{Binding Categories}" 
+                      SelectedItem="{Binding EditingSekce.Kategorie, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Popis:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="Description:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingSekce.Popis, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
@@ -50,10 +51,10 @@
                   AutoGenerateColumns="False" Height="150" Margin="10,0,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="*"/>
-                <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" Width="*"/>
-                <DataGridTextColumn Header="Autor" Binding="{Binding Autor}" Width="*"/>
-                <DataGridTextColumn Header="Rok Vydání" Binding="{Binding RokVydani}" Width="*"/>
-                <DataGridTextColumn Header="Nakladatelství" Binding="{Binding Nakladatelstvi}" Width="*"/>
+                <DataGridTextColumn Header="Title" Binding="{Binding Nazev}" Width="*"/>
+                <DataGridTextColumn Header="Author" Binding="{Binding Autor}" Width="*"/>
+                <DataGridTextColumn Header="Year of Publication" Binding="{Binding RokVydani}" Width="*"/>
+                <DataGridTextColumn Header="Publisher" Binding="{Binding Nakladatelstvi}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

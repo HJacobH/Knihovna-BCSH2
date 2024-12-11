@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BSCH2Knihovna.CtenarView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Správa Čtenářů a Výpůjček" Height="500" Width="800">
+        Title="Reader and Loan Management" Height="500" Width="800">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -24,30 +24,30 @@
                   AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Margin="0,0,10,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Visibility="Collapsed"/>
-                <DataGridTextColumn Header="Jméno" Binding="{Binding Jmeno}" Width="*"/>
-                <DataGridTextColumn Header="Příjmení" Binding="{Binding Prijmeni}" Width="*"/>
-                <DataGridTextColumn Header="Telefon" Binding="{Binding Telefon}" Width="*"/>
+                <DataGridTextColumn Header="First Name" Binding="{Binding Jmeno}" Width="*"/>
+                <DataGridTextColumn Header="Last Name" Binding="{Binding Prijmeni}" Width="*"/>
+                <DataGridTextColumn Header="Phone" Binding="{Binding Telefon}" Width="*"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,10" VerticalAlignment="Top">
-            <TextBlock Text="Jméno:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="First Name:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingCtenar.Jmeno, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Příjmení:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="Last Name:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingCtenar.Prijmeni, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Telefon:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="Phone:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingCtenar.Telefon, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
             <TextBlock Text="Email:" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBox Width="200" Text="{Binding EditingCtenar.Email, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                <Button Content="Add" Command="{Binding AddCtenarCommand}" Width="60" Margin="5"/>
-                <Button Content="Update" Command="{Binding UpdateCtenarCommand}" Width="60" Margin="5"/>
-                <Button Content="Delete" Command="{Binding DeleteCtenarCommand}" Width="60" Margin="5"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Add" Command="{Binding AddCtenarCommand}" Width="75" Margin="5,0"/>
+                <Button Content="Update" Command="{Binding UpdateCtenarCommand}" Width="75" Margin="5,0"/>
+                <Button Content="Delete" Command="{Binding DeleteCtenarCommand}" Width="75" Margin="5,0"/>
             </StackPanel>
         </StackPanel>
 
@@ -55,9 +55,9 @@
                   Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Visibility="Collapsed"/>
-                <DataGridTextColumn Header="Kniha" Binding="{Binding BookName}" Width="*"/>
-                <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" Width="*"/>
-                <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" Width="*"/>
+                <DataGridTextColumn Header="Book" Binding="{Binding BookName}" Width="*"/>
+                <DataGridTextColumn Header="Loan Date" Binding="{Binding DatumVypujceni}" Width="*"/>
+                <DataGridTextColumn Header="Return Due Date" Binding="{Binding DatumVratenka}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

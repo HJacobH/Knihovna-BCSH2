@@ -20,9 +20,9 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Book Name" Binding="{Binding BookName}" Width="*" />
                     <DataGridTextColumn Header="Reader Name" Binding="{Binding CtenarName}" Width="*" />
-                    <DataGridTextColumn Header="Datum Výpůjčky" Binding="{Binding DatumVypujceni}" Width="*" />
-                    <DataGridTextColumn Header="Datum Vrácení" Binding="{Binding DatumVratenka}" Width="*" />
-                    <DataGridTextColumn Header="Datum Vratu" Binding="{Binding DatumVratu}" Width="*" />
+                    <DataGridTextColumn Header="Loan Date" Binding="{Binding DatumVypujceni}" Width="*" />
+                    <DataGridTextColumn Header="Return Due Date" Binding="{Binding DatumVratenka}" Width="*" />
+                    <DataGridTextColumn Header="Actual Return Date" Binding="{Binding DatumVratu}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

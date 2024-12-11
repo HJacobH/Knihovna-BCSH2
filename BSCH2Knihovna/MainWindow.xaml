@@ -5,17 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BSCH2Knihovna"
         mc:Ignorable="d"
-        Title="Správa knihovny" Height="450" Width="800">
+        Title="Library Management" Height="450" Width="800">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <!-- Application Title -->
             <TextBlock Text="Library Management" FontSize="24" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"/>
 
-            <Button Content="Správa Knih" Click="OpenKnihaView_Click" Height="40" Margin="0,10"/>
+            <!-- Navigation Buttons -->
+            <Button Content="Manage Books" Click="OpenKnihaView_Click" Height="40" Margin="0,10"/>
             <Button Content="Manage Readers" Click="OpenReadersView_Click" Height="40" Margin="0,10"/>
             <Button Content="Manage Borrowings" Click="OpenBorrowingsView_Click" Height="40" Margin="0,10"/>
-            <Button Content="Manage Sekce" Click="OpenSekceView_Click" Height="40" Margin="0,10"/>
-            <Button Content="Delete Database" Click="DeleteDatabase_Click" Height="40" Margin="0,20"/>
+            <Button Content="Manage Sections" Click="OpenSekceView_Click" Height="40" Margin="0,10"/>
 
+            <!-- Delete Database Button -->
+            <Button Content="Delete Database" Click="DeleteDatabase_Click" Height="40" Margin="0,20"/>
         </StackPanel>
     </Grid>
 </Window>
