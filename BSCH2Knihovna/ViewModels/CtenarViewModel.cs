@@ -192,12 +192,28 @@ namespace BSCH2Knihovna.ViewModels
         {
             if (SelectedCtenar == null) return;
 
-            _repository.DeleteCtenar(SelectedCtenar.Id);
-            Ctenari.Remove(SelectedCtenar);
-            SelectedCtenar = null;
-            OnPropertyChanged(nameof(BorrowedBooks));
-            MessageBox.Show("Reader deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            var result = MessageBox.Show($"Are you sure you want to delete reader '{SelectedCtenar.Jmeno} {SelectedCtenar.Prijmeni}' and all their borrowings?",
+                                         "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var borrowingsToDelete = _repository.GetBorrowingsByCtenarId(SelectedCtenar.Id).ToList();
+                foreach (var borrowing in borrowingsToDelete)
+                {
+                    _repository.DeleteVypujceni(borrowing.Id);
+                }
+
+                _repository.DeleteCtenar(SelectedCtenar.Id);
+
+                Ctenari.Remove(SelectedCtenar);
+                BorrowedBooks.Clear();
+
+                SelectedCtenar = null;
+
+                MessageBox.Show("Reader and all their borrowings deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
+
 
         private bool CanModifyCtenar() => SelectedCtenar != null;
 

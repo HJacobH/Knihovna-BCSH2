@@ -94,6 +94,17 @@ namespace BSCH2Knihovna.Classes
         }
 
 
+        public void ClearBookSection(string isbn)
+        {
+            var knihyCollection = _context.GetCollection<Kniha>("Knihy");
+            var book = knihyCollection.FindOne(k => k.ISBN == isbn);
+
+            if (book != null)
+            {
+                book.SekceId = 0;
+                knihyCollection.Update(book);
+            }
+        }
 
         public void AddVypujceni(Vypujceni vypujceni) => _context.GetCollection<Vypujceni>("Vypujceni").Insert(vypujceni);
 

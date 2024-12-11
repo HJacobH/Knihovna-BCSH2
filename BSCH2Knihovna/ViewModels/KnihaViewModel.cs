@@ -197,11 +197,36 @@ namespace BSCH2Knihovna.ViewModels
 
         private void DeleteKniha()
         {
-            if (SelectedKniha != null)
+            if (SelectedKniha == null) return;
+
+            var result = MessageBox.Show($"Are you sure you want to delete the book '{SelectedKniha.Nazev}' and all its associations?",
+                                         "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
             {
+                var sectionId = SelectedKniha.SekceId;
+                if (sectionId != 0)
+                {
+                    _repository.ClearBookSection(SelectedKniha.ISBN);
+                }
+
+                var borrowingsToDelete = _repository.GetAllVypujceni()
+                                                    .Where(v => v.KnihaId == SelectedKniha.Id)
+                                                    .ToList();
+
+                foreach (var borrowing in borrowingsToDelete)
+                {
+                    _repository.DeleteVypujceni(borrowing.Id);
+                }
+
                 _repository.DeleteKniha(SelectedKniha.ISBN);
+
                 Knihy.Remove(SelectedKniha);
-                EditingKniha = new Kniha();
+
+                OnPropertyChanged(nameof(Knihy));
+                SelectedKniha = null;
+
+                MessageBox.Show("Book and its associations deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
