@@ -141,12 +141,17 @@ namespace BSCH2Knihovna.ViewModels
 
         private void AddCtenar()
         {
-            if (EditingCtenar == null) return;
-
-            if (string.IsNullOrWhiteSpace(EditingCtenar.Jmeno) ||
-                string.IsNullOrWhiteSpace(EditingCtenar.Prijmeni))
+            var errors = new List<string>
             {
-                MessageBox.Show("Please fill out all required fields.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                EditingCtenar[nameof(EditingCtenar.Jmeno)],
+                EditingCtenar[nameof(EditingCtenar.Prijmeni)],
+                EditingCtenar[nameof(EditingCtenar.Telefon)],
+                EditingCtenar[nameof(EditingCtenar.Email)]
+            }.Where(e => !string.IsNullOrEmpty(e)).ToList();
+
+            if (errors.Any())
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation Errors", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -167,9 +172,24 @@ namespace BSCH2Knihovna.ViewModels
             MessageBox.Show("New reader added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+
         private void UpdateCtenar()
         {
             if (SelectedCtenar == null || EditingCtenar == null) return;
+
+            var errors = new List<string>
+            {
+                EditingCtenar[nameof(EditingCtenar.Jmeno)],
+                EditingCtenar[nameof(EditingCtenar.Prijmeni)],
+                EditingCtenar[nameof(EditingCtenar.Telefon)],
+                EditingCtenar[nameof(EditingCtenar.Email)]
+            }.Where(e => !string.IsNullOrEmpty(e)).ToList();
+
+            if (errors.Any())
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation Errors", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             var existingBorrowings = SelectedCtenar.VypujceneKnihy;
 
@@ -186,6 +206,7 @@ namespace BSCH2Knihovna.ViewModels
 
             MessageBox.Show("Reader updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
 
         private void DeleteCtenar()

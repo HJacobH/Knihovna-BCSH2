@@ -143,15 +143,24 @@ namespace BSCH2Knihovna.ViewModels
 
         private void AddKniha()
         {
-            if (EditingKniha == null)
+            if (EditingKniha == null || SelectedSekce == null)
             {
-                MessageBox.Show("EditingKniha is not initialized.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please fill in all required fields.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (SelectedSekce == null)
+            var errors = new List<string>
             {
-                MessageBox.Show("Please select a Sekce first.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                EditingKniha[nameof(EditingKniha.ISBN)],
+                EditingKniha[nameof(EditingKniha.Nazev)],
+                EditingKniha[nameof(EditingKniha.Autor)],
+                EditingKniha[nameof(EditingKniha.RokVydani)],
+                EditingKniha[nameof(EditingKniha.Nakladatelstvi)]
+            }.Where(e => !string.IsNullOrEmpty(e)).ToList();
+
+            if (errors.Any())
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation Errors", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -170,30 +179,45 @@ namespace BSCH2Knihovna.ViewModels
             Knihy.Add(newKniha);
 
             EditingKniha = new Kniha();
+            OnPropertyChanged(nameof(EditingKniha));
         }
+
 
         private void UpdateKniha()
         {
-            if (SelectedKniha != null && EditingKniha != null)
+            if (SelectedKniha == null || EditingKniha == null) return;
+
+            var errors = new List<string>
             {
-                SelectedKniha.ISBN = EditingKniha.ISBN;
-                SelectedKniha.Nazev = EditingKniha.Nazev;
-                SelectedKniha.Autor = EditingKniha.Autor;
-                SelectedKniha.RokVydani = EditingKniha.RokVydani;
-                SelectedKniha.Zanr = EditingKniha.Zanr;
-                SelectedKniha.Nakladatelstvi = EditingKniha.Nakladatelstvi;
+                EditingKniha[nameof(EditingKniha.ISBN)],
+                EditingKniha[nameof(EditingKniha.Nazev)],
+                EditingKniha[nameof(EditingKniha.Autor)],
+                EditingKniha[nameof(EditingKniha.RokVydani)],
+                EditingKniha[nameof(EditingKniha.Nakladatelstvi)]
+            }.Where(e => !string.IsNullOrEmpty(e)).ToList();
 
-                if (SelectedSekce != null)
-                {
-                    SelectedKniha.SekceId = SelectedSekce.Id;
-                    SelectedKniha.Zanr = SelectedSekce.Kategorie;
-                }
-
-                _repository.UpdateKniha(SelectedKniha);
-
-                LoadKnihy();
+            if (errors.Any())
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation Errors", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
+
+            SelectedKniha.ISBN = EditingKniha.ISBN;
+            SelectedKniha.Nazev = EditingKniha.Nazev;
+            SelectedKniha.Autor = EditingKniha.Autor;
+            SelectedKniha.RokVydani = EditingKniha.RokVydani;
+            SelectedKniha.Nakladatelstvi = EditingKniha.Nakladatelstvi;
+
+            if (SelectedSekce != null)
+            {
+                SelectedKniha.SekceId = SelectedSekce.Id;
+                SelectedKniha.Zanr = SelectedSekce.Kategorie;
+            }
+
+            _repository.UpdateKniha(SelectedKniha);
+            LoadKnihy();
         }
+
 
         private void DeleteKniha()
         {

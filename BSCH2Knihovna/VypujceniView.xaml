@@ -16,7 +16,7 @@
 
             <DataGrid ItemsSource="{Binding FilteredVypujceniList}" 
               SelectedItem="{Binding SelectedVypujceni}" 
-              AutoGenerateColumns="False">
+              AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Book Name" Binding="{Binding BookName}" Width="*" />
                     <DataGridTextColumn Header="Reader Name" Binding="{Binding CtenarName}" Width="*" />

@@ -20,7 +20,7 @@
         </StackPanel>
 
         <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding FilteredSekceList}" 
-                  SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0">
+                  SelectedItem="{Binding SelectedSekce}" AutoGenerateColumns="False" Margin="0,0,10,0" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Room" Binding="{Binding Mistnost}" Width="*"/>
                 <DataGridTextColumn Header="Category" Binding="{Binding Kategorie}" Width="*"/>
@@ -48,7 +48,7 @@
 
         <TextBlock Text="Books in this Section:" FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="10,10,0,5"/>
         <DataGrid Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding SelectedSekce.Knihy}" 
-                  AutoGenerateColumns="False" Height="150" Margin="10,0,0,0">
+                  AutoGenerateColumns="False" Height="150" Margin="10,0,0,0" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="*"/>
                 <DataGridTextColumn Header="Title" Binding="{Binding Nazev}" Width="*"/>
