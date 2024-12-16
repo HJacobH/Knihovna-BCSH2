@@ -25,7 +25,33 @@ namespace BSCH2Knihovna.Classes
 
         public void UpdateKniha(Kniha kniha) => _context.GetCollection<Kniha>("Knihy").Update(kniha);
 
-        public void DeleteKniha(string id) => _context.GetCollection<Kniha>("Knihy").Delete(id);
+        public void DeleteKniha(string isbn)
+        {
+            var collection = _context.GetCollection<Kniha>("Knihy");
+
+            var book = collection.FindOne(k => k.ISBN == isbn);
+            if (book != null)
+            {
+                collection.Delete(book.Id); 
+            }
+            else
+            {
+                throw new InvalidOperationException($"No book with ISBN '{isbn}' exists.");
+            }
+        }
+        public bool IsBookBorrowed(int knihaId)
+        {
+            var collection = _context.GetCollection<Vypujceni>("Vypujceni");
+            return collection.Exists(v => v.KnihaId == knihaId && v.DatumVratu == null);
+        }
+
+        public bool IsBookBorrowedByOther(int knihaId, int currentVypujceniId)
+        {
+            var collection = _context.GetCollection<Vypujceni>("Vypujceni");
+
+            return collection.Exists(v => v.KnihaId == knihaId && v.DatumVratu == null && v.Id != currentVypujceniId);
+        }
+
 
         public IEnumerable<Sekce> GetAllSekce()
         {

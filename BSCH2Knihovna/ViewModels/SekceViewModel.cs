@@ -29,7 +29,8 @@ namespace BSCH2Knihovna.ViewModels
         "Non-Fiction",
         "Science",
         "History",
-        "Children's Books"
+        "Children's Books",
+        "Fantasy"
     };
 
         public ICommand AddSekceCommand { get; }

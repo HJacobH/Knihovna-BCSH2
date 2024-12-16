@@ -105,8 +105,7 @@ namespace BSCH2Knihovna.ViewModels
                 return;
             }
 
-            bool isBookBorrowed = VypujceniList.Any(v => v.KnihaId == EditingVypujceni.KnihaId && v.DatumVratu == null);
-            if (isBookBorrowed)
+            if (_repository.IsBookBorrowed(EditingVypujceni.KnihaId))
             {
                 MessageBox.Show("This book is already borrowed and not yet returned.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -120,7 +119,7 @@ namespace BSCH2Knihovna.ViewModels
                 KnihaId = EditingVypujceni.KnihaId,
                 CtenarId = EditingVypujceni.CtenarId,
                 DatumVypujceni = DateTime.Now,
-                DatumVratenka = EditingVypujceni.DatumVratenka ?? DateTime.Now.AddDays(14), 
+                DatumVratenka = EditingVypujceni.DatumVratenka ?? DateTime.Now.AddDays(14),
                 DatumVratu = EditingVypujceni.DatumVratu,
                 BookName = book?.Nazev ?? "Unknown Book",
                 CtenarName = reader?.Jmeno ?? "Unknown Reader"
@@ -133,12 +132,20 @@ namespace BSCH2Knihovna.ViewModels
             OnPropertyChanged(nameof(EditingVypujceni));
         }
 
-
         private void UpdateVypujceni()
         {
             if (SelectedVypujceni == null)
             {
                 MessageBox.Show("No borrowing selected for update.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            bool isBookBorrowedByOther = _repository.IsBookBorrowedByOther(EditingVypujceni.KnihaId, SelectedVypujceni.Id);
+
+            if (isBookBorrowedByOther)
+            {
+                MessageBox.Show("This book is already borrowed by another reader and not yet returned.",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -150,8 +157,11 @@ namespace BSCH2Knihovna.ViewModels
             _repository.UpdateVypujceni(SelectedVypujceni);
 
             RefreshVypujceniList();
+
             MessageBox.Show("Borrowing updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+
 
         private void DeleteVypujceni()
         {
